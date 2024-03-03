@@ -4,7 +4,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace AniListNet.Helpers;
 
-internal class GqlObjectResolver : DefaultContractResolver
+public class GqlObjectResolver : DefaultContractResolver
 {
     protected override List<MemberInfo> GetSerializableMembers(Type objectType)
     {

@@ -1,6 +1,6 @@
 ﻿namespace AniListNet.Helpers;
 
-internal class GqlSelection
+public class GqlSelection
 {
     public string Name { get; set; }
     public string? Alias { get; set; }

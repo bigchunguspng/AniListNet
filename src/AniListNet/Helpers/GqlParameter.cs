@@ -1,6 +1,6 @@
 ﻿namespace AniListNet.Helpers;
 
-internal class GqlParameter
+public class GqlParameter
 {
     public string Name { get; set; }
     public object? Value { get; set; }

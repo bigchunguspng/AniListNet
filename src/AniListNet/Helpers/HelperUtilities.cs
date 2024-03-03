@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace AniListNet.Helpers;
 
-internal static class HelperUtilities
+public static class HelperUtilities
 {
     public static string GetEnumMemberValue(Enum @enum)
     {
