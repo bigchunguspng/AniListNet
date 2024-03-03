@@ -3,14 +3,13 @@ using AniListNet.Objects;
 
 namespace AniListNet.Parameters;
 
-public class SearchUserFilter
+public class SearchUserFilter : AbstractSearchFilter
 {
     public bool? IsModerator { get; set; }
-    public string? Query { get; set; }
-    public UserSort Sort { get; set; } = UserSort.Relevance;
-    public bool SortDescending { get; set; } = true;
 
-    internal IList<GqlParameter> ToParameters()
+    public UserSort Sort { get; set; } = UserSort.Relevance;
+
+    public override IList<GqlParameter> ToParameters()
     {
         var parameters = new List<GqlParameter>();
         if (IsModerator.HasValue)
