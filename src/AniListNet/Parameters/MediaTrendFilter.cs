@@ -3,7 +3,7 @@ using AniListNet.Objects;
 
 namespace AniListNet.Parameters;
 
-public class MediaTrendFilter
+public class MediaTrendFilter : AbstractFilter
 {
     public int? MediaId { get; set; }
     public DateTime? Date { get; set; }
@@ -11,10 +11,10 @@ public class MediaTrendFilter
     public int? Popularity { get; set; }
     public int? Episode { get; set; }
     public bool Releasing { get; set; }
-    public MediaTrendSort Sort { get; set; } = MediaTrendSort.Popularity;
-    public bool SortDescending { get; set; } = true;
 
-    internal IList<GqlParameter> ToParameters()
+    public MediaTrendSort Sort { get; set; } = MediaTrendSort.Popularity;
+
+    public override IList<GqlParameter> ToParameters()
     {
         var parameters = new List<GqlParameter>();
         if (MediaId.HasValue)

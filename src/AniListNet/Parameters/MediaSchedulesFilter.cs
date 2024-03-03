@@ -3,16 +3,17 @@ using AniListNet.Objects;
 
 namespace AniListNet.Parameters;
 
-public class MediaSchedulesFilter
+public class MediaSchedulesFilter : AbstractFilter
 {
     public int? MediaId { get; set; }
     public bool NotYetAired { get; set; } = true;
     public DateTime? StartedAfterDate { get; set; }
     public DateTime? EndedBeforeDate { get; set; }
-    public MediaScheduleSort Sort { get; set; } = MediaScheduleSort.Time;
-    public bool SortDescending { get; set; }
 
-    internal IList<GqlParameter> ToParameters()
+    public MediaScheduleSort Sort { get; set; } = MediaScheduleSort.Time;
+    public override bool SortDescending { get; set; } = false;
+
+    public override IList<GqlParameter> ToParameters()
     {
         var parameters = new List<GqlParameter>();
         if (MediaId.HasValue)

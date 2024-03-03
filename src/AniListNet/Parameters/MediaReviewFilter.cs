@@ -3,13 +3,13 @@ using AniListNet.Objects;
 
 namespace AniListNet.Parameters;
 
-public class MediaReviewFilter
+public class MediaReviewFilter : AbstractFilter
 {
     public MediaType? Type { get; set; }
-    public MediaReviewSort Sort { get; set; } = MediaReviewSort.Rating;
-    public bool SortDescending { get; set; } = true;
 
-    internal IList<GqlParameter> ToParameters()
+    public MediaReviewSort Sort { get; set; } = MediaReviewSort.Rating;
+
+    public override IList<GqlParameter> ToParameters()
     {
         var parameters = new List<GqlParameter>
         {

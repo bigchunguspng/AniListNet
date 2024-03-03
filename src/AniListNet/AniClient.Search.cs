@@ -1,27 +1,13 @@
-﻿using AniListNet.Helpers;
-using AniListNet.Objects;
+﻿using AniListNet.Objects;
 using AniListNet.Parameters;
 
 namespace AniListNet;
 
 public partial class AniClient
 {
-    public async Task<AniPagination<T>> SearchAsync<T>(AbstractSearchFilter filter, string key, AniPaginationOptions? options = null)
+    public Task<AniPagination<T>> SearchAsync<T>(AbstractSearchFilter filter, string key, AniPaginationOptions? options = null)
     {
-        options ??= new AniPaginationOptions();
-        var selections = new GqlSelection("Page")
-        {
-            Parameters = options.ToParameters(),
-            Selections = new GqlSelection[]
-            {
-                new("pageInfo", GqlParser.ParseToSelections<PageInfo>()),
-                new(key, GqlParser.ParseToSelections<T>(), filter.ToParameters())
-            }
-        };
-        var response = await PostRequestAsync(selections);
-        var pageInfo = GqlParser.ParseFromJson<PageInfo>(response["Page"]["pageInfo"]);
-        var pageData = GqlParser.ParseFromJson<T[]>(response["Page"][key]);
-        return new AniPagination<T>(pageInfo, pageData);
+        return GetPaginatedAsync<T>(filter, key, options);
     }
 
     public Task<AniPagination<Media>> SearchMediaAsync(SearchMediaFilter filter, AniPaginationOptions? options = null)
