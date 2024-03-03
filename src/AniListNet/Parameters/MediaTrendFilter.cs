@@ -29,7 +29,7 @@ public class MediaTrendFilter : AbstractFilter
             parameters.Add(new GqlParameter("releasing", Releasing));
         if (Date.HasValue)
             parameters.Add(new GqlParameter("date", new DateTimeOffset(Date.Value).ToUnixTimeSeconds()));
-        parameters.Add(new GqlParameter("sort", $"${HelperUtilities.GetEnumMemberValue(Sort)}" + (SortDescending ? "_DESC" : string.Empty)));
+        // parameters.Add(new GqlParameter("sort", $"${HelperUtilities.GetEnumMemberValue(Sort)}" + (SortDescending ? "_DESC" : string.Empty)));
         return parameters;
     }
 }
