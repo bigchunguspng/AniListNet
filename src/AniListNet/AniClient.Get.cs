@@ -23,7 +23,7 @@ public partial class AniClient
     /// <summary>
     /// Generic method to get paginated data. Use it at your own risk.
     /// </summary>
-    public async Task<AniPagination<T>> GetPaginatedAsync<T>(AbstractFilter filter, string key, AniPaginationOptions? options = null)
+    public async Task<AniPagination<T>> GetPaginatedAsync<T>(IEnumerable<GqlParameter> parameters, string key, AniPaginationOptions? options = null)
     {
         options ??= new AniPaginationOptions();
         var selections = new GqlSelection("Page")
@@ -32,13 +32,18 @@ public partial class AniClient
             Selections = new GqlSelection[]
             {
                 new("pageInfo", GqlParser.ParseToSelections<PageInfo>()),
-                new(key, GqlParser.ParseToSelections<T>(), filter.ToParameters())
+                new(key, GqlParser.ParseToSelections<T>(), parameters)
             }
         };
         var response = await PostRequestAsync(selections);
         var pageInfo = GqlParser.ParseFromJson<PageInfo>(response["Page"]["pageInfo"]);
         var pageData = GqlParser.ParseFromJson<T[]>(response["Page"][key]);
         return new AniPagination<T>(pageInfo, pageData);
+    }
+
+    public Task<AniPagination<T>> GetPaginatedAsync<T>(AbstractFilter filter, string key, AniPaginationOptions? options = null)
+    {
+        return GetPaginatedAsync<T>(filter.ToParameters(), key, options);
     }
 
     /// <summary>
