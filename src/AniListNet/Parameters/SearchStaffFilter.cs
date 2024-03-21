@@ -3,14 +3,13 @@ using AniListNet.Objects;
 
 namespace AniListNet.Parameters;
 
-public class SearchStaffFilter
+public class SearchStaffFilter : AbstractSearchFilter
 {
     public bool? IsBirthday { get; set; }
-    public string? Query { get; set; }
-    public StaffSort Sort { get; set; } = StaffSort.Relevance;
-    public bool SortDescending { get; set; } = true;
 
-    internal IList<GqlParameter> ToParameters()
+    public StaffSort Sort { get; set; } = StaffSort.Relevance;
+
+    public override IList<GqlParameter> ToParameters()
     {
         var parameters = new List<GqlParameter>();
         if (IsBirthday.HasValue)

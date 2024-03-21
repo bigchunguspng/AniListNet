@@ -34,7 +34,7 @@ public class MediaTrend
     /// <summary>
     /// The number of users with watching/reading the media.
     /// </summary>
-    [GqlSelection("inProgress")] public int InProgressCount { get; private set; }
+    [GqlSelection("inProgress")] public int? InProgressCount { get; private set; }
 
     /// <summary>
     /// If the media was being released at this time.

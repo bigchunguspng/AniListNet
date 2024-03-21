@@ -3,13 +3,11 @@ using AniListNet.Objects;
 
 namespace AniListNet.Parameters;
 
-public class SearchStudioFilter
+public class SearchStudioFilter : AbstractSearchFilter
 {
-    public string? Query { get; set; }
     public StudioSort Sort { get; set; } = StudioSort.Relevance;
-    public bool SortDescending { get; set; } = true;
 
-    internal IList<GqlParameter> ToParameters()
+    public override IList<GqlParameter> ToParameters()
     {
         var parameters = new List<GqlParameter>();
         if (!string.IsNullOrEmpty(Query))

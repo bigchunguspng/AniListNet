@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace AniListNet.Helpers;
 
-internal static class GqlParser
+public static class GqlParser
 {
     private static readonly JsonSerializer JsonSerializer = new() { ContractResolver = new GqlObjectResolver() };
 

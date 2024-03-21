@@ -45,6 +45,11 @@ public class User
     /// </summary>
     [GqlSelection("siteUrl")] public Uri Url { get; private set; }
 
+    /// <summary>
+    /// When the user's data was last updated.
+    /// </summary>
+    [GqlSelection("updatedAt")] public int UpdatedAt { get; private set; }
+
     /* below are properties only for the authenticated user */
 
     /// <summary>

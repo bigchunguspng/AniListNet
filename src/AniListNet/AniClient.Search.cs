@@ -1,104 +1,38 @@
-﻿using AniListNet.Helpers;
-using AniListNet.Objects;
+﻿using AniListNet.Objects;
 using AniListNet.Parameters;
 
 namespace AniListNet;
 
 public partial class AniClient
 {
-    public async Task<AniPagination<Media>> SearchMediaAsync(SearchMediaFilter filter, AniPaginationOptions? options = null)
+    public Task<AniPagination<T>> SearchAsync<T>(AbstractSearchFilter filter, string key, AniPaginationOptions? options = null)
     {
-        options ??= new AniPaginationOptions();
-        var selections = new GqlSelection("Page")
-        {
-            Parameters = options.ToParameters(),
-            Selections = new GqlSelection[]
-            {
-                new("pageInfo", GqlParser.ParseToSelections<PageInfo>()),
-                new("media", GqlParser.ParseToSelections<Media>(), filter.ToParameters())
-            }
-        };
-        var response = await PostRequestAsync(selections);
-        return new AniPagination<Media>(
-            GqlParser.ParseFromJson<PageInfo>(response["Page"]["pageInfo"]),
-            GqlParser.ParseFromJson<Media[]>(response["Page"]["media"])
-        );
+        return GetPaginatedAsync<T>(filter, key, options);
     }
 
-    public async Task<AniPagination<Character>> SearchCharacterAsync(SearchCharacterFilter filter, AniPaginationOptions? options = null)
+    public Task<AniPagination<Media>> SearchMediaAsync(SearchMediaFilter filter, AniPaginationOptions? options = null)
     {
-        options ??= new AniPaginationOptions();
-        var selections = new GqlSelection("Page")
-        {
-            Parameters = options.ToParameters(),
-            Selections = new GqlSelection[]
-            {
-                new("pageInfo", GqlParser.ParseToSelections<PageInfo>()),
-                new("characters", GqlParser.ParseToSelections<Character>(), filter.ToParameters())
-            }
-        };
-        var response = await PostRequestAsync(selections);
-        return new AniPagination<Character>(
-            GqlParser.ParseFromJson<PageInfo>(response["Page"]["pageInfo"]),
-            GqlParser.ParseFromJson<Character[]>(response["Page"]["characters"])
-        );
+        return SearchAsync<Media>(filter, "media", options);
     }
 
-    public async Task<AniPagination<Staff>> SearchStaffAsync(SearchStaffFilter filter, AniPaginationOptions? options = null)
+    public Task<AniPagination<Character>> SearchCharacterAsync(SearchCharacterFilter filter, AniPaginationOptions? options = null)
     {
-        options ??= new AniPaginationOptions();
-        var selections = new GqlSelection("Page")
-        {
-            Parameters = options.ToParameters(),
-            Selections = new GqlSelection[]
-            {
-                new("pageInfo", GqlParser.ParseToSelections<PageInfo>()),
-                new("staff", GqlParser.ParseToSelections<Staff>(), filter.ToParameters())
-            }
-        };
-        var response = await PostRequestAsync(selections);
-        return new AniPagination<Staff>(
-            GqlParser.ParseFromJson<PageInfo>(response["Page"]["pageInfo"]),
-            GqlParser.ParseFromJson<Staff[]>(response["Page"]["staff"])
-        );
+        return SearchAsync<Character>(filter, "characters", options);
     }
 
-    public async Task<AniPagination<Studio>> SearchStudioAsync(SearchStudioFilter filter, AniPaginationOptions? options = null)
+    public Task<AniPagination<Staff>> SearchStaffAsync(SearchStaffFilter filter, AniPaginationOptions? options = null)
     {
-        options ??= new AniPaginationOptions();
-        var selections = new GqlSelection("Page")
-        {
-            Parameters = options.ToParameters(),
-            Selections = new GqlSelection[]
-            {
-                new("pageInfo", GqlParser.ParseToSelections<PageInfo>()),
-                new("studios", GqlParser.ParseToSelections<Studio>(), filter.ToParameters())
-            }
-        };
-        var response = await PostRequestAsync(selections);
-        return new AniPagination<Studio>(
-            GqlParser.ParseFromJson<PageInfo>(response["Page"]["pageInfo"]),
-            GqlParser.ParseFromJson<Studio[]>(response["Page"]["studios"])
-        );
+        return SearchAsync<Staff>(filter, "staff", options);
     }
 
-    public async Task<AniPagination<User>> SearchUserAsync(SearchUserFilter filter, AniPaginationOptions? options = null)
+    public Task<AniPagination<Studio>> SearchStudioAsync(SearchStudioFilter filter, AniPaginationOptions? options = null)
     {
-        options ??= new AniPaginationOptions();
-        var selections = new GqlSelection("Page")
-        {
-            Parameters = options.ToParameters(),
-            Selections = new GqlSelection[]
-            {
-                new("pageInfo", GqlParser.ParseToSelections<PageInfo>()),
-                new("users", GqlParser.ParseToSelections<User>(), filter.ToParameters())
-            }
-        };
-        var response = await PostRequestAsync(selections);
-        return new AniPagination<User>(
-            GqlParser.ParseFromJson<PageInfo>(response["Page"]["pageInfo"]),
-            GqlParser.ParseFromJson<User[]>(response["Page"]["users"])
-        );
+        return SearchAsync<Studio>(filter, "studios", options);
+    }
+
+    public Task<AniPagination<User>> SearchUserAsync(SearchUserFilter filter, AniPaginationOptions? options = null)
+    {
+        return SearchAsync<User>(filter, "users", options);
     }
 
     /* below are methods that are the simplified versions of the above */

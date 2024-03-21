@@ -30,7 +30,7 @@ public partial class AniClient
         return IsAuthenticated;
     }
 
-    private async Task<JToken> PostRequestAsync(GqlSelection selection, bool isMutation = false)
+    public async Task<JToken> PostRequestAsync(GqlSelection selection, bool isMutation = false)
     {
         var body = JObject.FromObject(new { query = (isMutation ? "mutation" : string.Empty) + selection });
         var bodyText = body["query"].ToObject<string>();
@@ -56,7 +56,7 @@ public partial class AniClient
         return json["data"];
     }
 
-    private async Task<JToken> GetSingleDataAsync(params GqlSelection[] path)
+    public async Task<JToken> GetSingleDataAsync(params GqlSelection[] path)
     {
         var selection = path[^1];
         for (var index = path.Length - 2; index >= 0; index--)

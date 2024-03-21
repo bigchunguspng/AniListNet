@@ -3,14 +3,14 @@ using AniListNet.Objects;
 
 namespace AniListNet.Parameters;
 
-public class GetMediaFilter
+public class GetMediaFilter : AbstractFilter
 {
     public MediaType? Type { get; set; }
     public bool? OnList { get; set; }
-    public MediaSort Sort { get; set; } = MediaSort.Popularity;
-    public bool SortDescending { get; set; } = true;
 
-    internal IList<GqlParameter> ToParameters()
+    public MediaSort Sort { get; set; } = MediaSort.Popularity;
+
+    public override IList<GqlParameter> ToParameters()
     {
         var parameters = new List<GqlParameter>();
         if (Type.HasValue)

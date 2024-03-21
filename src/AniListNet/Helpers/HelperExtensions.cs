@@ -1,6 +1,6 @@
 namespace AniListNet.Helpers;
 
-internal static class HelperExtensions
+public static class HelperExtensions
 {
     public static (TObject[], TObject[]) SeparateByBooleans<TObject>(this IDictionary<TObject, bool> dictionary)
     {
