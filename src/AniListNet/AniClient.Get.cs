@@ -1,6 +1,7 @@
 using AniListNet.Helpers;
 using AniListNet.Objects;
 using AniListNet.Parameters;
+using Newtonsoft.Json.Linq;
 
 namespace AniListNet;
 
@@ -23,7 +24,36 @@ public partial class AniClient
     /// <summary>
     /// Generic method to get paginated data. Use it at your own risk.
     /// </summary>
-    public async Task<AniPagination<T>> GetPaginatedAsync<T>(IEnumerable<GqlParameter> parameters, string key, AniPaginationOptions? options = null)
+    public async Task<AniPagination<T>> GetPaginatedAsync<T>
+    (
+        IEnumerable<GqlParameter> parameters, string key, AniPaginationOptions? options = null
+    )
+    {
+        var response = await GetPaginatedResponseAsync<T>(parameters, key, options);
+        var pageInfo = GqlParser.ParseFromJson<PageInfo>(response["Page"]["pageInfo"]);
+        var pageData = GqlParser.ParseFromJson<T[]>(response["Page"][key]);
+        return new AniPagination<T>(pageInfo, pageData);
+    }
+
+    /// <summary>
+    /// Generic method to get paginated data. Use it at your own risk.
+    /// Different request and response types can help you handle GraphQL "... on" statement.
+    /// </summary>
+    public async Task<AniPagination<TResponse>> GetPaginatedAsync<TRequest, TResponse>
+    (
+        IEnumerable<GqlParameter> parameters, string key, AniPaginationOptions? options = null
+    )
+    {
+        var response = await GetPaginatedResponseAsync<TRequest>(parameters, key, options);
+        var pageInfo = GqlParser.ParseFromJson<PageInfo>(response["Page"]["pageInfo"]);
+        var pageData = GqlParser.ParseFromJson<TResponse[]>(response["Page"][key]);
+        return new AniPagination<TResponse>(pageInfo, pageData);
+    }
+
+    public Task<JToken> GetPaginatedResponseAsync<T>
+    (
+        IEnumerable<GqlParameter> parameters, string key, AniPaginationOptions? options = null
+    )
     {
         options ??= new AniPaginationOptions();
         var selections = new GqlSelection("Page")
@@ -35,10 +65,7 @@ public partial class AniClient
                 new(key, GqlParser.ParseToSelections<T>(), parameters)
             }
         };
-        var response = await PostRequestAsync(selections);
-        var pageInfo = GqlParser.ParseFromJson<PageInfo>(response["Page"]["pageInfo"]);
-        var pageData = GqlParser.ParseFromJson<T[]>(response["Page"][key]);
-        return new AniPagination<T>(pageInfo, pageData);
+        return PostRequestAsync(selections);
     }
 
     public Task<AniPagination<T>> GetPaginatedAsync<T>(AbstractFilter filter, string key, AniPaginationOptions? options = null)
